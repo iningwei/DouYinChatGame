@@ -41,17 +41,25 @@ class Socket():
             print("connect success!")
         except OSError:
             print(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()) + ' [ERROR] 无法连接到Socket服务器,OSError')
+            Socket.close()
         except Exception as e:
             print(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()) + ' [ERROR] 无法连接到Socket服务器,请检查服务器是否启动:'+e)
+            Socket.close()
     def sendMsg(msg):        
         try:
             #s.sendall(msg.encode()) # 尝试向服务端发送消息
             Socket.s.sendall(bytes(msg,'utf8'))
         except ConnectionAbortedError:
             print(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()) + ' [ERROR] ConnectionAbortedError,Do connet():')
+            Socket.close()
+            Socket.connet()
+        except OSError:
+            print(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()) + ' [ERROR] 无法发送消息到Socket服务器,OSError')
+            Socket.close()
             Socket.connet()
         except Exception as e:
             print(time.strftime("[%Y-%m-%d %H:%M:%S]", time.localtime()) + ' [ERROR] 无法发送消息到Socket服务器,Do connet():'+e)
+            Socket.close()
             Socket.connet()
     def close():
         Socket.s.close()
@@ -80,13 +88,21 @@ class Watcher():
 
                             # userID
                             userID = chat_message.user().id
+                            # nick
+                            nick= chat_message.user().nickname
+                            # shortId
+                            shortId=chat_message.user().shortId
+                            # specialId
+                            specialId=chat_message.user().specialId
+                            # displayId
+                            displayId=chat_message.user().displayId
                             # 发言
                             content = chat_message.instance.content
                             # 头像
                             userHeaderImg = chat_message.user().avatarThumb.urlList[0]
                             # print(userID, content, userHeaderImg)
                             # print(userID, content)
-                            filePath1=f"{getScriptDir()}\\userImages\\{userID}.jpg"
+                            filePath1=f"{getScriptDir()}\\userImages\\{shortId}.jpg"
                             if not os.path.exists(filePath1):
                                 filePath = downloadImg(userHeaderImg,filePath1)
                             #Socket.sendMsg(f"{userID}\0{content}\0{filePath}")
@@ -95,7 +111,7 @@ class Watcher():
                             Socket.sendMsg(f"{userID}@@@{content}")
                             # print(chat_message)
                             # print(f"{userID}@@@{content}@@@{filePath}")
-                            print(f"{userID}@@@{content}")
+                            print(f"{userID}:{shortId}:{nick}@@@{content}")
                     try:
                         os.remove(filepath)
                     except PermissionError as e:
