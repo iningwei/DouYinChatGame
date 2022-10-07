@@ -10,16 +10,24 @@ from messages import message_pb2
 from messages.chat import ChatMessage
 
 def downloadImg(url,path):
-    r = requests.get(url, stream=True)
-    if r.status_code == 200:
-        open(path, 'wb').write(r.content) # 将内容写入图片
-        #print(f"CODE: {r.status_code} download {url} to {path}") # 返回状态码
-        r.close()
-        return path
-    else:
-        print(f"CODE: {r.status_code} download {url} Failed.")
-        #return "error"
+    try:
+        r = requests.get(url, stream=True)
+        if r.status_code == 200:
+            open(path, 'wb').write(r.content) # 将内容写入图片
+            #print(f"CODE: {r.status_code} download {url} to {path}") # 返回状态码
+            r.close()
+            return path
+        else:
+            print(f"CODE: {r.status_code} download {url} Failed.")
+            #return "error"
+            return
+    except ConnectionResetError:
+        print("ConnectionResetError, download {url} Failed.")
         return
+    except Exception as e:
+        print('download Failed:'+e)
+        return
+    
 
 def getScriptDir():
     return os.path.split(os.path.realpath(__file__))[0]
@@ -58,7 +66,8 @@ class Watcher():
             if files:
                 for _ in files:
                     filepath = self.monitoringFile + '\\' + _
-
+                    if "a.gitignore" in filepath:
+                        continue
                     with open(filepath, 'rb') as f:
                         # print(f.read())
                         response = message_pb2.Response()
@@ -77,13 +86,16 @@ class Watcher():
                             userHeaderImg = chat_message.user().avatarThumb.urlList[0]
                             # print(userID, content, userHeaderImg)
                             # print(userID, content)
-                            filePath = downloadImg(userHeaderImg,f"{getScriptDir()}\\userImages\\{userID}.jpg")
+                            filePath1=f"{getScriptDir()}\\userImages\\{userID}.jpg"
+                            if not os.path.exists(filePath1):
+                                filePath = downloadImg(userHeaderImg,filePath1)
                             #Socket.sendMsg(f"{userID}\0{content}\0{filePath}")
                             # 用户uid\0用户发送的消息\0用户头像路径
                             # Socket.sendMsg(f"{userID}\0{content}\0{filePath}")
                             Socket.sendMsg(f"{userID}@@@{content}")
                             # print(chat_message)
-                            print(f"{userID}@@@{content}@@@{filePath}")
+                            # print(f"{userID}@@@{content}@@@{filePath}")
+                            print(f"{userID}@@@{content}")
                     try:
                         os.remove(filepath)
                     except PermissionError as e:
