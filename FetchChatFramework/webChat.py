@@ -8,6 +8,10 @@ import requests as requests
 
 from messages import message_pb2
 from messages.chat import ChatMessage
+from messages.member import MemberMessage
+from messages.like import LikeMessage
+from messages.social import SocialMessage
+from messages.gift import GiftMessage
 
 def downloadImg(url,path):
     try:
@@ -108,10 +112,69 @@ class Watcher():
                             #Socket.sendMsg(f"{userID}\0{content}\0{filePath}")
                             # 用户uid\0用户发送的消息\0用户头像路径
                             # Socket.sendMsg(f"{userID}\0{content}\0{filePath}")
-                            Socket.sendMsg(f"{userID}@@@{content}")
+                            ###Socket.sendMsg(f"{userID}@@@{content}")
                             # print(chat_message)
                             # print(f"{userID}@@@{content}@@@{filePath}")
+                            #print(f"{userID}:{shortId}:{nick}@@@{content}")
+                        elif message.method=="WebcastMemberMessage":
+                            member_message=MemberMessage()
+                            member_message.set_payload(message.payload)
+
+                            #userID
+                            userID=member_message.user().id
+                             # nick
+                            nick= member_message.user().nickname
+                            # shortId
+                            shortId=member_message.user().shortId
+                            # 发言
+                            content = "来了"
+                            #print(f"WebcastMemberMessage:{userID}:{shortId}:{nick}@@@{content}")
+                        elif message.method=="WebcastLikeMessage":
+                            like_message=LikeMessage()
+                            like_message.set_payload(message.payload)
+
+                            #userID
+                            userID=like_message.user().id
+                             # nick
+                            nick= like_message.user().nickname
+                            # shortId
+                            shortId=like_message.user().shortId
+                            # 发言
+                            content = "点赞"
+                            # 点赞总数
+                            count=like_message.instance.count
+                            total=like_message.instance.total
+                            #print(f"{userID}:{shortId}:{nick}@@@{content},count:{count},total:{total}")
+                        elif message.method=="WebcastSocialMessage":
+                            social_message=SocialMessage()
+                            social_message.set_payload(message.payload)
+
+                            #userID
+                            userID=social_message.user().id
+                             # nick
+                            nick= social_message.user().nickname
+                            # shortId
+                            shortId=social_message.user().shortId
+                            # 发言
+                            content = "关注"
+                            # 关注总数
+                            followCount=social_message.instance.followCount
+                            #print(f"{userID}:{shortId}:{nick}@@@{content},total:{followCount}")
+                        elif message.method=="WebcastGiftMessage":
+                            gift_message=GiftMessage()
+                            gift_message.set_payload(message.payload)
+
+                            #userID
+                            userID=gift_message.user().id
+                             # nick
+                            nick= gift_message.user().nickname
+                            # shortId
+                            shortId=gift_message.user().shortId
+                            # 发言
+                            content ="礼物："+gift_message.gift().describe+","+str(gift_message.gift().id)
                             print(f"{userID}:{shortId}:{nick}@@@{content}")
+                            # 0 粉丝团，463 小星星，3992 人气票，3242 入团卡，165 棒棒糖，2006 一捧鲜花 ，2001 一只玫瑰
+                            # 2110 一顶贵冠 ，164 抖音
                     try:
                         os.remove(filepath)
                     except PermissionError as e:
