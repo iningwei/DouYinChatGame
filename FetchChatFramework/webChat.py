@@ -5,6 +5,7 @@ import os
 import time
 import socket
 import requests as requests
+import xml.etree.ElementTree as ET
 
 from messages import message_pb2
 from messages.chat import ChatMessage
@@ -12,6 +13,7 @@ from messages.member import MemberMessage
 from messages.like import LikeMessage
 from messages.social import SocialMessage
 from messages.gift import GiftMessage
+from archives.xmlTools import XMLTool
 
 def downloadImg(url,path):
     try:
@@ -116,6 +118,11 @@ class Watcher():
                             # print(chat_message)
                             # print(f"{userID}@@@{content}@@@{filePath}")
                             #print(f"{userID}:{shortId}:{nick}@@@{content}")
+                            if content=="j":
+                                print("receive j")
+                                xmlTool=XMLTool()
+                                xmlTool.Save()
+
                         elif message.method=="WebcastMemberMessage":
                             member_message=MemberMessage()
                             member_message.set_payload(message.payload)
@@ -172,7 +179,7 @@ class Watcher():
                             shortId=gift_message.user().shortId
                             # 发言
                             content ="礼物："+gift_message.gift().describe+","+str(gift_message.gift().id)
-                            print(f"{userID}:{shortId}:{nick}@@@{content}")
+                            #print(f"{userID}:{shortId}:{nick}@@@{content}")
                             # 0 粉丝团，463 小星星，3992 人气票，3242 入团卡，165 棒棒糖，2006 一捧鲜花 ，2001 一只玫瑰
                             # 2110 一顶贵冠 ，164 抖音
                     try:
