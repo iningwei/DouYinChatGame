@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/2/18 
 # @Author  :
+from math import fabs
 import os
+from pickle import TRUE
+from telnetlib import theNULL
 import time
 import socket
 import requests as requests
 import xml.etree.ElementTree as ET
+import datetime  # 导入datetime模块
+import threading  # 导入threading模块
+
 
 from messages import message_pb2
 from messages.chat import ChatMessage
@@ -74,7 +80,7 @@ class Watcher():
     def __init__(self):
         self.monitoringFile = f'{getScriptDir()}\\douyinLiveFile'
 
-    def startWatcher(self):	
+    def startWatcher(self):       
         while True:
             files = os.listdir(self.monitoringFile)
             if files:
@@ -118,10 +124,10 @@ class Watcher():
                             # print(chat_message)
                             # print(f"{userID}@@@{content}@@@{filePath}")
                             #print(f"{userID}:{shortId}:{nick}@@@{content}")
-                            if content=="j":
-                                print("receive j")
-                                xmlTool=XMLTool()
-                                xmlTool.Save()
+                            if "j" in content:
+                                if isXMLReadedByQiangGeGe:
+                                    xmlTool.Join(f"{userID}{shortId}",f"{nick}")
+                                    
 
                         elif message.method=="WebcastMemberMessage":
                             member_message=MemberMessage()
@@ -190,10 +196,44 @@ class Watcher():
 
             time.sleep(2)
 
+
+xmlTool=XMLTool()
+previousJoinOutValue="-1"
+isXMLReadedByQiangGeGe=False
+# 定义xml读取方法
+def runXML():  
+    try:
+        isXMLReadedByQiangGeGe=False        
+        xmlTool.Read()
+        if not xmlTool.readedRoleJoinData.GameStartValue==0 and not xmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:
+            previousJoinOutValue=xmlTool.readedRoleJoinData.GUID_Join_OutValue
+            isXMLReadedByQiangGeGe=True
+            xmlTool.ClearCachedRoleJoinData()            
+        xmlTool.Save()
+    except PermissionError as e:
+        print("Permission error!")
+    timer=threading.Timer(1,runXML)  # 每秒运行
+    timer.start()  # 执行方法
+
+
+
 if __name__ == '__main__':
     if not os.path.isdir(getScriptDir()+"\\douyinLiveFile"):
         os.makedirs(getScriptDir()+"\\douyinLiveFile")
     if not os.path.isdir(getScriptDir()+"\\userImages"):
         os.makedirs(getScriptDir()+"\\userImages")
-    Socket.connet()
+
+    #XML读取
+    t1=threading.Timer(1,function=runXML)  # 创建定时器
+    t1.start()  # 开始执行线程
+
+    
+    
+
+
+
+
+
+    ##Socket.connet()#强哥项目不需要socket
+
     Watcher().startWatcher()
