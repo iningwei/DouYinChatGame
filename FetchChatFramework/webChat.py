@@ -21,6 +21,13 @@ from messages.social import SocialMessage
 from messages.gift import GiftMessage
 from archives.xmlTools import XMLTool
 
+xmlTool=XMLTool()
+global previousJoinOutValue
+previousJoinOutValue="-1"
+global isXMLReadedByQiangGeGe
+isXMLReadedByQiangGeGe=False
+
+
 def downloadImg(url,path):
     try:
         r = requests.get(url, stream=True)
@@ -124,7 +131,7 @@ class Watcher():
                             # print(chat_message)
                             # print(f"{userID}@@@{content}@@@{filePath}")
                             #print(f"{userID}:{shortId}:{nick}@@@{content}")
-                            if "j" in content:
+                            if not content=="":
                                 if isXMLReadedByQiangGeGe:
                                     xmlTool.Join(f"{userID}{shortId}",f"{nick}")
                                     
@@ -197,12 +204,12 @@ class Watcher():
             time.sleep(2)
 
 
-xmlTool=XMLTool()
-previousJoinOutValue="-1"
-isXMLReadedByQiangGeGe=False
+
 # 定义xml读取方法
 def runXML():  
     try:
+        global isXMLReadedByQiangGeGe
+        global previousJoinOutValue
         isXMLReadedByQiangGeGe=False        
         xmlTool.Read()
         if not xmlTool.readedRoleJoinData.GameStartValue==0 and not xmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:

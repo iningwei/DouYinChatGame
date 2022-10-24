@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Bank version="1">
+  <Section name="J">
+    <Key name="GUID_Join_Out">
+      <Value int="0" />
+    </Key>
+    <Key name="GameStart">
+		<Value int="1" />
+    </Key>
+    <Key name="GUID_Join">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN1">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN2">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN3">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN4">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN5">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN6">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN7">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN8">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN9">
+      <Value int="0" />
+    </Key>
+    <Key name="JPN10">
+      <Value int="0" />
+    </Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+  <Section name="0">
+	<Key name="PName">		
+		<Value text="用户昵称"/>
+	</Key>
+  </Section>
+</Bank>

@@ -1,5 +1,6 @@
 from genericpath import isfile
 import os
+import random
 import xml.etree.ElementTree as ET
 
 
@@ -51,12 +52,62 @@ class XMLTool():
         root.append(j_section)
         ##创建j_section的 GUID_Join_Out
         guid_join_out=ET.Element("Key")
-        guid_join_out.set("Key","GUID_Join_Out")
+        guid_join_out.set("name","GUID_Join_Out")
         j_section.append(guid_join_out)
         ##创建GUID_Join_Out的Value
         guid_join_out_value=ET.Element("Value")
         guid_join_out_value.set("int",self.cachedRoleJoinData.GUID_Join_OutValue)
-        ##TODO:
+        guid_join_out.append(guid_join_out_value)
+        ##创建j_section的GameStart
+        game_start=ET.Element("Key")
+        game_start.set("name","GameStart")
+        j_section.append(game_start)
+        ##创建GameStart的Value
+        game_start_value=ET.Element("Value")
+        game_start_value.set("int",self.cachedRoleJoinData.GameStartValue)
+        game_start.append(game_start_value)
+
+        ##创建j_section的 GUID_Join
+        guid_join=ET.Element("Key")
+        guid_join.set("name","GUID_Join")
+        j_section.append(guid_join)
+        ##创建GameStart的Value
+        guid_join_value=ET.Element("Value")
+        guid_join_value.set("int",self.cachedRoleJoinData.GUID_JoinValue)
+        guid_join.append(guid_join_value)
+
+
+
+        ##判断加入玩家数
+        joinPlayerCount=len(self.cachedRoleJoinData.JoinDic)
+        if joinPlayerCount>0:
+            random_GUID_JOIN_Value=random.randint(100,100000)
+            print("ranValue:"+str(random_GUID_JOIN_Value))
+            guid_join_value.set("int",str(random_GUID_JOIN_Value))
+            index=0
+            for x in self.cachedRoleJoinData.JoinDic:
+                roleId=x
+                roleNick=self.cachedRoleJoinData.JoinDic[x]
+                ##创建玩家JPN
+                index=index+1
+                jpn=ET.Element("Key")
+                jpn.set("name","JPN"+str(index))
+                j_section.append(jpn)
+                ##创建JPN值
+                jpn_value=ET.Element("Value")
+                jpn_value.set("int",str(roleId))
+                jpn.append(jpn_value)
+                ######创建玩家Section
+                player_section=ET.Element("Section")
+                player_section.set("name",str(roleId))
+                root.append(player_section)
+                ##创建玩家section的昵称信息
+                pname=ET.Element("Key")
+                pname.set("name","PName")
+                player_section.append(pname)
+                pname_value=ET.Element("Value")
+                pname_value.set("text",roleNick)
+                pname.append(pname_value)
 
         ##增加换行符
         ##__indent(root)
@@ -86,7 +137,13 @@ class XMLTool():
                             keyValue=node3.get("int")
                             self.readedRoleJoinData.GUID_Join_OutValue=keyValue
                             self.cachedRoleJoinData.GUID_Join_OutValue=keyValue
-    
+                    if keyName=="GUID_Join":
+                        for node3 in list(node2):
+                            keyValue=node3.get("int")
+                            self.readedRoleJoinData.GUID_JoinValue=keyValue
+                            self.cachedRoleJoinData.GUID_JoinValue=keyValue
+
+
     def ClearCachedRoleJoinData(self):
         self.cachedRoleJoinData.JoinDic.clear()
     def Join(self,id,nick):

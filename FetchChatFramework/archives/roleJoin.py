@@ -6,4 +6,4 @@ class RoleJoin():
         self.JoinDic={}        
 
     def Join(self,id,nick):
-        self.JoinDic
+        self.JoinDic[id]=nick
