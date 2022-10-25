@@ -132,8 +132,7 @@ class Watcher():
                             # print(f"{userID}@@@{content}@@@{filePath}")
                             #print(f"{userID}:{shortId}:{nick}@@@{content}")
                             if not content=="":
-                                if isXMLReadedByQiangGeGe:
-                                    xmlTool.Join(f"{userID}{shortId}",f"{nick}")
+                                xmlTool.Join(f"{userID}{shortId}",f"{nick}")
                                     
 
                         elif message.method=="WebcastMemberMessage":
@@ -215,8 +214,9 @@ def runXML():
         if not xmlTool.readedRoleJoinData.GameStartValue==0 and not xmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:
             previousJoinOutValue=xmlTool.readedRoleJoinData.GUID_Join_OutValue
             isXMLReadedByQiangGeGe=True
-            xmlTool.ClearCachedRoleJoinData()            
-        xmlTool.Save()
+
+        if isXMLReadedByQiangGeGe==True:
+            xmlTool.Save()
     except PermissionError as e:
         print("Permission error!")
     timer=threading.Timer(1,runXML)  # 每秒运行

@@ -13,8 +13,7 @@ from archives.roleJoin import RoleJoin
 
 
 
-
-
+ 
 
 # 增加换行符
 def __indent(elem, level=0):
@@ -36,10 +35,13 @@ def __indent(elem, level=0):
 class XMLTool():
     def __init__(self):
         path=os.path.split(os.path.realpath(__file__))[0]
-        self.savePath = f'{path}\\archiveXmlFile\\PlayerJoin.SC2Bank.xml'
+        self.filePath="E:\\TrillionJoy\\PlayerJoin.SC2Bank.xml"
+        self.savePath =self.filePath ####f'{path}\\archiveXmlFile\\PlayerJoin.SC2Bank.xml'
         self.readedRoleJoinData=RoleJoin()
         self.cachedRoleJoinData=RoleJoin()
 
+    def ClearCachedRoleJoinData(self):
+        self.cachedRoleJoinData.JoinDic.clear()
     def Save(self):
         #创建节点
         root=ET.Element("Bank")
@@ -108,7 +110,8 @@ class XMLTool():
                 pname_value=ET.Element("Value")
                 pname_value.set("text",roleNick)
                 pname.append(pname_value)
-
+        ## 清空JoinData
+        self.ClearCachedRoleJoinData()
         ##增加换行符
         ##__indent(root)
         ##写文件
@@ -144,8 +147,7 @@ class XMLTool():
                             self.cachedRoleJoinData.GUID_JoinValue=keyValue
 
 
-    def ClearCachedRoleJoinData(self):
-        self.cachedRoleJoinData.JoinDic.clear()
+
     def Join(self,id,nick):
         if not id in self.cachedRoleJoinData.JoinDic and len(self.cachedRoleJoinData.JoinDic)<10:
             self.cachedRoleJoinData.JoinDic[id]=nick
