@@ -4,7 +4,7 @@
 from math import fabs
 import os
 from pickle import TRUE
-from telnetlib import theNULL
+##from telnetlib import theNULL
 import time
 import socket
 import requests as requests
@@ -121,9 +121,13 @@ class Watcher():
                             userHeaderImg = chat_message.user().avatarThumb.urlList[0]
                             # print(userID, content, userHeaderImg)
                             # print(userID, content)
-                            filePath1=f"{getScriptDir()}\\userImages\\{shortId}.jpg"
-                            if not os.path.exists(filePath1):
-                                filePath = downloadImg(userHeaderImg,filePath1)
+
+                            ###暂时先不下载头像---->
+                            #filePath1=f"{getScriptDir()}\\userImages\\{shortId}.jpg"
+                            #if not os.path.exists(filePath1):
+                            #    filePath = downloadImg(userHeaderImg,filePath1)
+                            ###----->
+
                             #Socket.sendMsg(f"{userID}\0{content}\0{filePath}")
                             # 用户uid\0用户发送的消息\0用户头像路径
                             # Socket.sendMsg(f"{userID}\0{content}\0{filePath}")
@@ -131,7 +135,11 @@ class Watcher():
                             # print(chat_message)
                             # print(f"{userID}@@@{content}@@@{filePath}")
                             #print(f"{userID}:{shortId}:{nick}@@@{content}")
+
+
                             if not content=="":
+                            #if content=="j" or content=="J":
+                                print(f"{nick}:{content}")
                                 xmlTool.Join(f"{userID}{shortId}",f"{nick}")
                                     
 

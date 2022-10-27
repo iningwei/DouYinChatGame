@@ -15,24 +15,26 @@ from archives.roleJoin import RoleJoin
 
  
 
-# 增加换行符
-def __indent(elem, level=0):
-    i = "\n" + level*"\t"
-    if len(elem):
-        if not elem.text or not elem.text.strip():
-            elem.text = i + "\t"
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-        for elem in elem:
-            __indent(elem, level+1)
-        if not elem.tail or not elem.tail.strip():
-            elem.tail = i
-    else:
-        if level and (not elem.tail or not elem.tail.strip()):
-            elem.tail = i
+
 
 
 class XMLTool():
+    # 增加换行符
+    def __indent(self,elem, level=0):
+        i = "\n" + level*"\t"
+        if len(elem):
+            if not elem.text or not elem.text.strip():
+                elem.text = i + "\t"
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+            for elem in elem:
+                self.__indent(elem, level+1)
+            if not elem.tail or not elem.tail.strip():
+                elem.tail = i
+        else:
+            if level and (not elem.tail or not elem.tail.strip()):
+                elem.tail = i
+
     def __init__(self):
         path=os.path.split(os.path.realpath(__file__))[0]
         self.filePath="E:\\TrillionJoy\\PlayerJoin.SC2Bank.xml"
@@ -113,7 +115,7 @@ class XMLTool():
         ## 清空JoinData
         self.ClearCachedRoleJoinData()
         ##增加换行符
-        ##__indent(root)
+        self.__indent(root)
         ##写文件
         if not os.path.exists(self.savePath):
             print("not exist,create file")
@@ -149,5 +151,6 @@ class XMLTool():
 
 
     def Join(self,id,nick):
-        if not id in self.cachedRoleJoinData.JoinDic and len(self.cachedRoleJoinData.JoinDic)<10:
-            self.cachedRoleJoinData.JoinDic[id]=nick
+        if not (id in self.cachedRoleJoinData.JoinDic) :
+            self.cachedRoleJoinData.Join(id,nick)
+            
