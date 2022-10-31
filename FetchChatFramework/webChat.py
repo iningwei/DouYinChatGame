@@ -24,6 +24,9 @@ from archives.xmlTools import XMLTool
 xmlTool=XMLTool()
 global previousJoinOutValue
 previousJoinOutValue="-1"
+global previousGameStartValue
+previousGameStartValue="0"
+
 global isXMLReadedByQiangGeGe
 isXMLReadedByQiangGeGe=False
 
@@ -139,7 +142,7 @@ class Watcher():
 
                             if not content=="":
                             #if content=="j" or content=="J":
-                                print(f"{nick}:{content}")
+                                #print(f"{nick}:{content}")
                                 xmlTool.Join(f"{userID}{shortId}",f"{nick}")
                                     
 
@@ -217,14 +220,23 @@ def runXML():
     try:
         global isXMLReadedByQiangGeGe
         global previousJoinOutValue
+        global previousGameStartValue
         isXMLReadedByQiangGeGe=False        
         xmlTool.Read()
-        if not xmlTool.readedRoleJoinData.GameStartValue==0 and not xmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:
-            previousJoinOutValue=xmlTool.readedRoleJoinData.GUID_Join_OutValue
+        ##处理重开局
+        if not previousGameStartValue==xmlTool.readedRoleJoinData.GameStartValue:
+            previousGameStartValue=xmlTool.readedRoleJoinData.GameStartValue
+            xmlTool.InitFile("0",previousGameStartValue,"0")
+            xmlTool.ClearCachedAllRoleJoinData()
+            xmlTool.Read()
+        if not xmlTool.readedRoleJoinData.GameStartValue=="0" and not xmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:
+            previousJoinOutValue=xmlTool.readedRoleJoinData.GUID_Join_OutValue            
             isXMLReadedByQiangGeGe=True
 
-        if isXMLReadedByQiangGeGe==True:
+        if isXMLReadedByQiangGeGe==True:            
             xmlTool.Save()
+            
+            
     except PermissionError as e:
         print("Permission error!")
     timer=threading.Timer(1,runXML)  # 每秒运行
@@ -239,6 +251,8 @@ if __name__ == '__main__':
         os.makedirs(getScriptDir()+"\\userImages")
 
     #XML读取
+    #先初始化xml文件
+    xmlTool.InitFile("0","0","0")
     t1=threading.Timer(1,function=runXML)  # 创建定时器
     t1.start()  # 开始执行线程
 

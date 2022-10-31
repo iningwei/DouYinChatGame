@@ -44,6 +44,52 @@ class XMLTool():
 
     def ClearCachedRoleJoinData(self):
         self.cachedRoleJoinData.JoinDic.clear()
+    def ClearCachedAllRoleJoinData(self):
+        self.cachedRoleJoinData.AllJoinDic.clear()
+    def InitFile(self,join_out_init_value,game_start_init_Value,join_init_value):
+        #创建节点
+        root=ET.Element("Bank")
+        root.set("version","1")
+        ##创建文档
+        tree=ET.ElementTree(root)
+        ##创建J Section
+        j_section=ET.Element("Section")
+        j_section.set("name","J")
+        root.append(j_section)
+        ##创建j_section的 GUID_Join_Out
+        guid_join_out=ET.Element("Key")
+        guid_join_out.set("name","GUID_Join_Out")
+        j_section.append(guid_join_out)
+        ##创建GUID_Join_Out的Value
+        guid_join_out_value=ET.Element("Value")
+        guid_join_out_value.set("int",join_out_init_value)
+        guid_join_out.append(guid_join_out_value)
+        ##创建j_section的GameStart
+        game_start=ET.Element("Key")
+        game_start.set("name","GameStart")
+        j_section.append(game_start)
+        ##创建GameStart的Value
+        game_start_value=ET.Element("Value")
+        game_start_value.set("int",game_start_init_Value)
+        game_start.append(game_start_value)
+
+        ##创建j_section的 GUID_Join
+        guid_join=ET.Element("Key")
+        guid_join.set("name","GUID_Join")
+        j_section.append(guid_join)
+        ##创建GameStart的Value
+        guid_join_value=ET.Element("Value")
+        guid_join_value.set("int",join_init_value)
+        guid_join.append(guid_join_value)
+ 
+        ##增加换行符
+        self.__indent(root)
+        ##写文件
+        if not os.path.exists(self.savePath):
+            print("not exist,create file")
+            open(self.savePath,'w').close()
+        tree.write(self.savePath,encoding="utf-8",xml_declaration=True)
+        print("init file success")
     def Save(self):
         #创建节点
         root=ET.Element("Bank")
@@ -85,7 +131,8 @@ class XMLTool():
         ##判断加入玩家数
         joinPlayerCount=len(self.cachedRoleJoinData.JoinDic)
         if joinPlayerCount>0:
-            random_GUID_JOIN_Value=random.randint(100,100000)
+            print("joined role count:"+str(joinPlayerCount))
+            random_GUID_JOIN_Value=random.randint(1,99999)
             print("ranValue:"+str(random_GUID_JOIN_Value))
             guid_join_value.set("int",str(random_GUID_JOIN_Value))
             index=0
@@ -121,9 +168,9 @@ class XMLTool():
             print("not exist,create file")
             open(self.savePath,'w').close()
         tree.write(self.savePath,encoding="utf-8",xml_declaration=True)
-        print("save success")
+        #print("save success")
     def Read(self):
-        print("begin read xml file:"+self.savePath)
+        #print("begin read xml file:"+self.savePath)
 
         tree = ET.parse(self.savePath)
         root = tree.getroot()
