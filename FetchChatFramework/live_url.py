@@ -1,2 +1,2 @@
 def url():
-    return "https://live.douyin.com/328665466990"
+    return "https://live.douyin.com/717372667419"

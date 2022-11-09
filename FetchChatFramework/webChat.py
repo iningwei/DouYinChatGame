@@ -142,8 +142,9 @@ class Watcher():
 
                             if not content=="":
                             #if content=="j" or content=="J":
-                                #print(f"{nick}:{content}")
-                                xmlTool.Join(f"{userID}{shortId}",f"{nick}")
+                                #print(f"try join:{nick}")
+                                shortIdStr=str(shortId)[0:7]#取7位，防止强哥那边越界
+                                xmlTool.Join(shortIdStr,f"{nick}")
                                     
 
                         elif message.method=="WebcastMemberMessage":
@@ -225,12 +226,17 @@ def runXML():
         xmlTool.Read()
         ##处理重开局
         if not previousGameStartValue==xmlTool.readedRoleJoinData.GameStartValue:
+            print("重开局！！！！！！！！！！！！！！")
             previousGameStartValue=xmlTool.readedRoleJoinData.GameStartValue
             xmlTool.InitFile("0",previousGameStartValue,"0")
             xmlTool.ClearCachedAllRoleJoinData()
             xmlTool.Read()
         if not xmlTool.readedRoleJoinData.GameStartValue=="0" and not xmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:
             previousJoinOutValue=xmlTool.readedRoleJoinData.GUID_Join_OutValue            
+            isXMLReadedByQiangGeGe=True
+            print("previousJoinOutValue:"+previousJoinOutValue)
+
+        if not xmlTool.readedRoleJoinData.GameStartValue=="0" and len(xmlTool.cachedRoleJoinData.JoinDic)>0:
             isXMLReadedByQiangGeGe=True
 
         if isXMLReadedByQiangGeGe==True:            

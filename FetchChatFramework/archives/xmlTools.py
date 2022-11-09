@@ -37,7 +37,7 @@ class XMLTool():
 
     def __init__(self):
         path=os.path.split(os.path.realpath(__file__))[0]
-        self.filePath="E:\\TrillionJoy\\PlayerJoin.SC2Bank.xml"
+        self.filePath="C:\\Users\\zhouhui\\Documents\\StarCraft II\\Banks\\PlayerJoin.SC2Bank"
         self.savePath =self.filePath ####f'{path}\\archiveXmlFile\\PlayerJoin.SC2Bank.xml'
         self.readedRoleJoinData=RoleJoin()
         self.cachedRoleJoinData=RoleJoin()
@@ -130,15 +130,16 @@ class XMLTool():
 
         ##判断加入玩家数
         joinPlayerCount=len(self.cachedRoleJoinData.JoinDic)
+        print("joined role count:"+str(joinPlayerCount))
         if joinPlayerCount>0:
-            print("joined role count:"+str(joinPlayerCount))
             random_GUID_JOIN_Value=random.randint(1,99999)
-            print("ranValue:"+str(random_GUID_JOIN_Value))
+            print("random join_value:"+str(random_GUID_JOIN_Value))
             guid_join_value.set("int",str(random_GUID_JOIN_Value))
             index=0
             for x in self.cachedRoleJoinData.JoinDic:
                 roleId=x
                 roleNick=self.cachedRoleJoinData.JoinDic[x]
+                print("role:"+roleNick+",id:"+roleId)
                 ##创建玩家JPN
                 index=index+1
                 jpn=ET.Element("Key")
@@ -168,7 +169,7 @@ class XMLTool():
             print("not exist,create file")
             open(self.savePath,'w').close()
         tree.write(self.savePath,encoding="utf-8",xml_declaration=True)
-        #print("save success")
+        print("save success")
     def Read(self):
         #print("begin read xml file:"+self.savePath)
 

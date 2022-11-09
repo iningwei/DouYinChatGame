@@ -9,7 +9,8 @@ class RoleJoin():
 
     def Join(self,id,nick):
         if id in self.AllJoinDic:
-            return        
-        if len(self.JoinDic)<10:
+            return 
+        count=len(self.JoinDic)    
+        if count<10:            
             self.AllJoinDic[id]=nick
             self.JoinDic[id]=nick
