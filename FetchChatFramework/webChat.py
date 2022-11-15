@@ -19,9 +19,9 @@ from messages.member import MemberMessage
 from messages.like import LikeMessage
 from messages.social import SocialMessage
 from messages.gift import GiftMessage
-from archives.xmlTools import XMLTool
+from archives.xmlTools import RoleJoinXMLTool
 
-xmlTool=XMLTool()
+rolejoin_XmlTool=RoleJoinXMLTool()
 global previousJoinOutValue
 previousJoinOutValue="-1"
 global previousGameStartValue
@@ -144,7 +144,7 @@ class Watcher():
                             #if content=="j" or content=="J":
                                 #print(f"try join:{nick}")
                                 shortIdStr=str(shortId)[0:7]#取7位，防止强哥那边越界
-                                xmlTool.Join(shortIdStr,f"{nick}")
+                                rolejoin_XmlTool.Join(shortIdStr,f"{nick}")
                                     
 
                         elif message.method=="WebcastMemberMessage":
@@ -223,24 +223,24 @@ def runXML():
         global previousJoinOutValue
         global previousGameStartValue
         isXMLReadedByQiangGeGe=False        
-        xmlTool.Read()
+        rolejoin_XmlTool.Read()
         ##处理重开局
-        if not previousGameStartValue==xmlTool.readedRoleJoinData.GameStartValue:
+        if not previousGameStartValue==rolejoin_XmlTool.readedRoleJoinData.GameStartValue:
             print("重开局！！！！！！！！！！！！！！")
-            previousGameStartValue=xmlTool.readedRoleJoinData.GameStartValue
-            xmlTool.InitFile("0",previousGameStartValue,"0")
-            xmlTool.ClearCachedAllRoleJoinData()
-            xmlTool.Read()
-        if not xmlTool.readedRoleJoinData.GameStartValue=="0" and not xmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:
-            previousJoinOutValue=xmlTool.readedRoleJoinData.GUID_Join_OutValue            
+            previousGameStartValue=rolejoin_XmlTool.readedRoleJoinData.GameStartValue
+            rolejoin_XmlTool.InitFile("0",previousGameStartValue,"0")
+            rolejoin_XmlTool.ClearCachedAllRoleJoinData()
+            rolejoin_XmlTool.Read()
+        if not rolejoin_XmlTool.readedRoleJoinData.GameStartValue=="0" and not rolejoin_XmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:
+            previousJoinOutValue=rolejoin_XmlTool.readedRoleJoinData.GUID_Join_OutValue            
             isXMLReadedByQiangGeGe=True
             print("previousJoinOutValue:"+previousJoinOutValue)
 
-        if not xmlTool.readedRoleJoinData.GameStartValue=="0" and len(xmlTool.cachedRoleJoinData.JoinDic)>0:
+        if not rolejoin_XmlTool.readedRoleJoinData.GameStartValue=="0" and len(rolejoin_XmlTool.cachedRoleJoinData.JoinDic)>0:
             isXMLReadedByQiangGeGe=True
 
         if isXMLReadedByQiangGeGe==True:            
-            xmlTool.Save()
+            rolejoin_XmlTool.Save()
             
             
     except PermissionError as e:
@@ -258,7 +258,7 @@ if __name__ == '__main__':
 
     #XML读取
     #先初始化xml文件
-    xmlTool.InitFile("0","0","0")
+    rolejoin_XmlTool.InitFile("0","0","0")
     t1=threading.Timer(1,function=runXML)  # 创建定时器
     t1.start()  # 开始执行线程
 
