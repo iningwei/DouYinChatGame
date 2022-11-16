@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Bank version="1">
+  <Section name="DM">
+    <Key name="DM_In">
+      <Value int="0" />
+    </Key>
+    <Key name="DM_Out">
+      <Value int="0" />
+    </Key>
+    <Key name="DM1">
+      <Value int="0" />
+    </Key>
+    <Key name="DM2">
+      <Value int="0" />
+    </Key>
+    <Key name="DM3">
+      <Value int="0" />
+    </Key>
+    <Key name="DM4">
+      <Value int="0" />
+    </Key>
+    <Key name="DM5">
+      <Value int="0" />
+    </Key>
+    <Key name="DM6">
+      <Value int="0" />
+    </Key>
+    <Key name="DM7">
+      <Value int="0" />
+    </Key>
+    <Key name="DM8">
+      <Value int="0" />
+    </Key>
+    <Key name="DM9">
+      <Value int="0" />
+    </Key>
+    <Key name="DM10">
+      <Value int="0" />
+    </Key>
+  </Section>
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>  
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>  
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>  
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>  
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>  
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>  
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>  
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>  
+  <Section name="0">
+	  <Key name="DM">
+		  <Value text="j1"/>
+	  </Key>
+  </Section>
+</Bank>
