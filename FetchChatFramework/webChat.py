@@ -20,6 +20,7 @@ from messages.like import LikeMessage
 from messages.social import SocialMessage
 from messages.gift import GiftMessage
 from archives.xmlTools import RoleJoinXMLTool
+from archives.xmlTools import DMXMLTool
 
 rolejoin_XmlTool=RoleJoinXMLTool()
 global previousJoinOutValue
@@ -27,8 +28,13 @@ previousJoinOutValue="-1"
 global previousGameStartValue
 previousGameStartValue="0"
 
-global isXMLReadedByQiangGeGe
-isXMLReadedByQiangGeGe=False
+global isJoinXMLReadedByQiangGeGe
+isJoinXMLReadedByQiangGeGe=False
+
+global isDMXMLReadedByQiangGeGe
+isDMXMLReadedByQiangGeGe=False
+dm_XmlTool=DMXMLTool()
+
 
 
 def downloadImg(url,path):
@@ -141,10 +147,12 @@ class Watcher():
 
 
                             if not content=="":
-                            #if content=="j" or content=="J":
-                                #print(f"try join:{nick}")
                                 shortIdStr=str(shortId)[0:7]#取7位，防止强哥那边越界
-                                rolejoin_XmlTool.Join(shortIdStr,f"{nick}")
+                                if content=="j" or content=="J":
+                                    #print(f"try join:{nick}")                                    
+                                    rolejoin_XmlTool.Join(shortIdStr,f"{nick}")
+                                else:
+                                    dm_XmlTool.Add(shortIdStr,f"{content}")
                                     
 
                         elif message.method=="WebcastMemberMessage":
@@ -219,29 +227,38 @@ class Watcher():
 # 定义xml读取方法
 def runXML():  
     try:
-        global isXMLReadedByQiangGeGe
+        global isJoinXMLReadedByQiangGeGe
         global previousJoinOutValue
         global previousGameStartValue
-        isXMLReadedByQiangGeGe=False        
+        isJoinXMLReadedByQiangGeGe=False        
         rolejoin_XmlTool.Read()
         ##处理重开局
-        if not previousGameStartValue==rolejoin_XmlTool.readedRoleJoinData.GameStartValue:
-            print("重开局！！！！！！！！！！！！！！")
-            previousGameStartValue=rolejoin_XmlTool.readedRoleJoinData.GameStartValue
-            rolejoin_XmlTool.InitFile("0",previousGameStartValue,"0")
-            rolejoin_XmlTool.ClearCachedAllRoleJoinData()
-            rolejoin_XmlTool.Read()
+        # if not previousGameStartValue==rolejoin_XmlTool.readedRoleJoinData.GameStartValue:
+        #     print("重开局！！！！！！！！！！！！！！")
+        #     previousGameStartValue=rolejoin_XmlTool.readedRoleJoinData.GameStartValue
+        #     rolejoin_XmlTool.InitFile("0",previousGameStartValue,"0")
+        #     rolejoin_XmlTool.ClearCachedAllRoleJoinData()
+        #     rolejoin_XmlTool.Read()
         if not rolejoin_XmlTool.readedRoleJoinData.GameStartValue=="0" and not rolejoin_XmlTool.readedRoleJoinData.GUID_Join_OutValue==previousJoinOutValue:
             previousJoinOutValue=rolejoin_XmlTool.readedRoleJoinData.GUID_Join_OutValue            
-            isXMLReadedByQiangGeGe=True
+            isJoinXMLReadedByQiangGeGe=True
             print("previousJoinOutValue:"+previousJoinOutValue)
 
         if not rolejoin_XmlTool.readedRoleJoinData.GameStartValue=="0" and len(rolejoin_XmlTool.cachedRoleJoinData.JoinDic)>0:
-            isXMLReadedByQiangGeGe=True
+            isJoinXMLReadedByQiangGeGe=True
 
-        if isXMLReadedByQiangGeGe==True:            
+        if isJoinXMLReadedByQiangGeGe==True:            
             rolejoin_XmlTool.Save()
-            
+        #--->处理DMXml
+        global isDMXMLReadedByQiangGeGe
+        isDMXMLReadedByQiangGeGe=False
+        dm_XmlTool.Read()
+        if not rolejoin_XmlTool.readedRoleJoinData.GameStartValue=="0" and len(dm_XmlTool.cachedRoleDMData.DMDic)>0:
+            isDMXMLReadedByQiangGeGe=True
+
+        if isDMXMLReadedByQiangGeGe==True:            
+            dm_XmlTool.Save()
+
             
     except PermissionError as e:
         print("Permission error!")
@@ -259,6 +276,9 @@ if __name__ == '__main__':
     #XML读取
     #先初始化xml文件
     rolejoin_XmlTool.InitFile("0","0","0")
+
+    dm_XmlTool.InitFile("0","0")
+    
     t1=threading.Timer(1,function=runXML)  # 创建定时器
     t1.start()  # 开始执行线程
 

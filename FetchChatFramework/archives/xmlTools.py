@@ -218,7 +218,7 @@ class DMXMLTool():
 
     def __init__(self):
         path=os.path.split(os.path.realpath(__file__))[0]
-        self.filePath="C:\\Users\\zhouhui\\Documents\\StarCraft II\\Banks\\PlayerDM"
+        self.filePath="C:\\Users\\zhouhui\\Documents\\StarCraft II\\Banks\\PlayerDM.SC2Bank"
         self.savePath =self.filePath ####f'{path}\\archiveXmlFile\\PlayerDM.xml'
         self.readedRoleDMData=RoleDM()
         self.cachedRoleDMData=RoleDM()
